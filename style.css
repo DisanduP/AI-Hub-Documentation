@@ -88,6 +88,8 @@ h3 {
     font-size: 1.25rem;
     margin: 2rem 0 1rem;
     color: var(--text);
+    border-left: 4px solid var(--primary);
+    padding-left: 1rem;
 }
 
 h4 {
@@ -156,8 +158,18 @@ th {
     margin-right: 0.5rem;
 }
 
-.tag-tech { background: #dbeafe; color: #1e40af; }
-.tag-epic { background: #fef3c7; color: #92400e; }
+.tag-tech { 
+    background: #dbeafe; 
+    color: #1e40af; 
+}
+.tag-epic { 
+    background: #fef3c7; 
+    color: #92400e; 
+}
+.tag-security {
+    background: #ecfdf5;
+    color: #065f46;
+}
 
 li strong {
     color: var(--text);
