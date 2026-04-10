@@ -162,3 +162,38 @@ th {
 li strong {
     color: var(--text);
 }
+
+.code-block {
+    background: #1e293b;
+    color: #e2e8f0;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+    overflow-x: auto;
+    font-size: 0.85rem;
+}
+
+.code-block pre {
+    margin: 0;
+}
+
+.code-block code {
+    background: transparent;
+    padding: 0;
+    color: inherit;
+}
+
+section ul {
+    list-style-type: none;
+    margin-top: 0.5rem;
+}
+
+section ul li {
+    padding: 0.25rem 0;
+    font-size: 0.9rem;
+}
+
+section ul li code {
+    color: var(--primary);
+    font-weight: 600;
+}
