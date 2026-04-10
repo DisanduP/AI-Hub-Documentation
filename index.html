@@ -17,6 +17,9 @@
             <li><a href="#features">Features & Scope</a></li>
             <li><a href="#metrics">Metrics & KPIs</a></li>
             <li><a href="#api">API & Keys</a></li>
+            <li><a href="#getting-started">Getting Started</a></li>
+            <li><a href="#api-reference">API Reference</a></li>
+            <li><a href="#faq">FAQ</a></li>
         </ul>
     </nav>
     <main>
@@ -145,6 +148,90 @@
                 <li><strong>Auth:</strong> OIDC and API Keys for metrics ingestion.</li>
                 <li><strong>Endpoints:</strong> CRUD for entities, Async push for logs/metrics, and Real-time triggers.</li>
             </ul>
+        </section>
+
+        <section id="getting-started">
+            <h2>Getting Started: Quick Start Guide</h2>
+            <div class="card">
+                <h3>1. Register Your AI Agent</h3>
+                <p>Register your agent to get a unique identifier and enable monitoring.</p>
+                <div class="code-block">
+                    <pre><code>curl -X POST http://localhost:5000/agents \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -d '{
+    "name": "Customer Support Chatbot",
+    "description": "AI-powered customer support assistant",
+    "category": "CustomerService",
+    "model": "GPT4",
+    "keyFeatures": "NLP;Intent classification"
+  }'</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>2. Create API Key for Metrics</h3>
+                <p>Generate a key for your agent to send metrics without full user authentication.</p>
+                <div class="code-block">
+                    <pre><code>curl -X POST http://localhost:5000/agents/{agentId}/apikeys \
+  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
+  -d '{"name": "Metrics Key"}'</code></pre>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>3. Send Metrics</h3>
+                <p>Use your API key to push performance data.</p>
+                <div class="code-block">
+                    <pre><code>curl -X POST http://localhost:5000/agents/{agentId}/metrics \
+  -H "X-Api-Key: sk-your-key" \
+  -d '[{
+    "name": "response_time",
+    "value": 1.2,
+    "unit": "seconds"
+  }]'</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="api-reference">
+            <h2>API Endpoints Reference</h2>
+            <div class="grid">
+                <div class="card">
+                    <h4>Agents</h4>
+                    <ul>
+                        <li><code>POST /agents</code> - Create</li>
+                        <li><code>GET /agents</code> - List all</li>
+                        <li><code>PATCH /agents/{id}/activate</code> - Activate</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>Metrics</h4>
+                    <ul>
+                        <li><code>POST /agents/{id}/metrics</code> - Push</li>
+                        <li><code>GET /agents/{id}/metrics</code> - Retrieval</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>Teams</h4>
+                    <ul>
+                        <li><code>POST /teams</code> - Create team</li>
+                        <li><code>POST /teams/{id}/members</code> - Add members</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="faq">
+            <h2>Frequently Asked Questions</h2>
+            <div class="card">
+                <strong>Do I have to use AI Hub for all projects?</strong>
+                <p>No, it's voluntary but highly recommended for centralized visibility.</p>
+            </div>
+            <div class="card">
+                <strong>How does authentication work?</strong>
+                <p>Users use Microsoft Entra ID (OIDC). Metrics collection uses X-Api-Key headers.</p>
+            </div>
         </section>
     </main>
 </body>
