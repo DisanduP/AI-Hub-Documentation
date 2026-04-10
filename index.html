@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Hub - Documentation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <h1>AI HUB</h1>
+        <ul>
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#architecture">Architecture</a></li>
+            <li><a href="#data-model">Data Model</a></li>
+            <li><a href="#tech-stack">Tech Stack</a></li>
+            <li><a href="#features">Features & Scope</a></li>
+            <li><a href="#metrics">Metrics & KPIs</a></li>
+            <li><a href="#api">API & Keys</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section id="overview">
+            <h2>Overview</h2>
+            <p>AI Hub is a centralized management and observability platform for AI agents at 99x. It enables developers to register agents, monitor performance in real-time, and manage organizational access through a unified dashboard.</p>
+        </section>
+
+        <section id="architecture">
+            <h2>Architecture</h2>
+            <div class="card">
+                <p>Designed as a high-performance system with clear layer separation:</p>
+                <ul>
+                    <li><strong>Frontend:</strong> React/Next.js dashboard for management and visualization.</li>
+                    <li><strong>Backend:</strong> ASP.NET Core API Gateway handling business logic and external integrations.</li>
+                    <li><strong>Integration:</strong> Seamless connection with Azure OpenAI, Microsoft Graph, and Entra ID (Azure AD).</li>
+                    <li><strong>Persistence:</strong> PostgreSQL for relational data and potentially vector stores for agent memory.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="data-model">
+            <h2>Core Data Model</h2>
+            <div class="card">
+                <h3>Entities & Relationships</h3>
+                <ul>
+                    <li><strong>Users:</strong> Managed via Office 365/Entra ID. Supports multi-tenancy.</li>
+                    <li><strong>Agents:</strong> Each agent instance belongs to exactly one team.</li>
+                    <li><strong>Teams:</strong> Supports hierarchical structures (Parent/Child teams).</li>
+                    <li><strong>Roles:</strong> Access is managed at the agent/team level (Admin vs. User).</li>
+                </ul>
+            </div>
+            <table>
+                <tr>
+                    <th>Entity</th>
+                    <th>Key Attributes</th>
+                </tr>
+                <tr>
+                    <td>AiAgent</td>
+                    <td>Category, Status, AI Model, TeamId</td>
+                </tr>
+                <tr>
+                    <td>AgentTeam</td>
+                    <td>Name, Description, ParentTeamId</td>
+                </tr>
+                <tr>
+                    <td>AgentMetric</td>
+                    <td>Name, Value, Unit, Dimensions (JSON)</td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="tech-stack">
+            <h2>Tech Stack & Infrastructure</h2>
+            <table>
+                <tr>
+                    <th>Component</th>
+                    <th>Technology</th>
+                </tr>
+                <tr>
+                    <td>Frontend App</td>
+                    <td>Next.js (Azure Static Web Apps)</td>
+                </tr>
+                <tr>
+                    <td>Backend API</td>
+                    <td>.NET Core (Azure App Service)</td>
+                </tr>
+                <tr>
+                    <td>Database</td>
+                    <td>PostgreSQL (Azure Database for PostgreSQL)</td>
+                </tr>
+                <tr>
+                    <td>Identity Provider</td>
+                    <td>Azure Entra ID (OIDC)</td>
+                </tr>
+                <tr>
+                    <td>Secrets Management</td>
+                    <td>Azure Key Vault</td>
+                </tr>
+                <tr>
+                    <td>Monitoring</td>
+                    <td>Azure App Insights</td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="features">
+            <h2>Scope & Features</h2>
+            <div class="card">
+                <h3>Agent Management</h3>
+                <p>Full CRUD for agents you belong to, including category tagging (Status, Model, Category) and contact person assignment.</p>
+            </div>
+            <div class="card">
+                <h3>Team Governance</h3>
+                <p>Manage members, roles (Admin/User), and team hierarchies. Invite members and handle access requests.</p>
+            </div>
+            <div class="card">
+                <h3>Identity</h3>
+                <p>RBAC aligned to org hierarchy with external identity support (AWS IAM, Azure AD).</p>
+            </div>
+        </section>
+
+        <section id="metrics">
+            <h2>Metrics & Observability</h2>
+            <div class="grid">
+                <div class="card">
+                    <h4>Performance</h4>
+                    <p>Execution time, Throughput, Response time.</p>
+                </div>
+                <div class="card">
+                    <h4>Accuracy</h4>
+                    <p>Success rates, Hallucination tracking, Error types.</p>
+                </div>
+                <div class="card">
+                    <h4>Resources</h4>
+                    <p>Token consumption, Cost-per-task, Model breakdown.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="api">
+            <h2>API & Security</h2>
+            <p>Secure communication is established via Agent-specific API keys.</p>
+            <ul>
+                <li><strong>Key Management:</strong> Handled at the Agent/Team level.</li>
+                <li><strong>Auth:</strong> OIDC and API Keys for metrics ingestion.</li>
+                <li><strong>Endpoints:</strong> CRUD for entities, Async push for logs/metrics, and Real-time triggers.</li>
+            </ul>
+        </section>
+    </main>
+</body>
+</html>
