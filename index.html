@@ -17,6 +17,8 @@
             <li><a href="#metrics">Metrics & KPIs</a></li>
             <li><a href="#getting-started">Quick Start</a></li>
             <li><a href="#integration">Integration</a></li>
+            <li><a href="#dashboard">Dashboard Guide</a></li>
+            <li><a href="#best-practices">Best Practices</a></li>
             <li><a href="#faq">FAQ</a></li>
         </ul>
     </nav>
@@ -125,25 +127,64 @@
         </section>
 
         <section id="getting-started">
-            <h2>Quick Start Guide</h2>
+            <h2>Quick Start Guide (Under 15 Mins)</h2>
             <div class="card">
-                <h3>1. Register & Key Generation</h3>
-                <p>Register your agent via the API or Dashboard to receive your unique <code>agentId</code> and generate an <code>X-Api-Key</code>.</p>
+                <h3>1. Prerequisites & Auth</h3>
+                <p>The platform uses <strong>Microsoft Entra ID</strong>. All direct API calls require a Bearer token. In development, use:</p>
+                <ul>
+                    <li><strong>Dashboard:</strong> <code>http://localhost:3000</code></li>
+                    <li><strong>API Base:</strong> <code>http://localhost:5000</code></li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3>2. Register Your Agent</h3>
                 <div class="code-block">
-                    <pre><code># Create API Key
-curl -X POST http://api.aihub/agents/{id}/apikeys \
-  -H "Authorization: Bearer {token}"</code></pre>
+                    <pre><code>curl -X POST http://localhost:5000/agents \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Support Bot",
+    "category": "CustomerService",
+    "model": "GPT4"
+  }'</code></pre>
                 </div>
             </div>
 
             <div class="card">
-                <h3>2. Push Metrics</h3>
-                <p>Use your API key to push performance data (single or bulk).</p>
+                <h3>3. Push Metrics (Single or Bulk)</h3>
+                <p>Use your generated <code>X-Api-Key</code> to push data. You can send multiple metrics in one call for efficiency:</p>
                 <div class="code-block">
-                    <pre><code># Bulk Upload
-curl -X POST http://api.aihub/agents/{id}/metrics/bulk \
-  -H "X-Api-Key: {key}" \
-  -d '[{"name": "latency", "value": 0.5}]'</code></pre>
+                    <pre><code># Bulk Metrics Example
+curl -X POST http://localhost:5000/agents/{id}/metrics/bulk \
+  -H "X-Api-Key: sk-abcd1234" \
+  -d '[
+    {"name": "response_time", "value": 1.2, "unit": "seconds"},
+    {"name": "tokens_used", "value": 150, "unit": "count"}
+  ]'</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="api-reference">
+            <h2>API Reference</h2>
+            <div class="grid">
+                <div class="card">
+                    <h4>Agents & Teams</h4>
+                    <ul>
+                        <li><code>GET /agents/my-agents</code> - Your agents</li>
+                        <li><code>PATCH /agents/{id}/activate</code> - Activate</li>
+                        <li><code>PUT /agents/{id}/team</code> - Assign Team</li>
+                        <li><code>POST /teams/{id}/members</code> - Add Members</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h4>Users & Keys</h4>
+                    <ul>
+                        <li><code>GET /users/me</code> - Current Profile</li>
+                        <li><code>GET /agents/{id}/apikeys</code> - List Keys</li>
+                        <li><code>DELETE /agents/{id}/apikeys/{keyId}</code> - Revoke</li>
+                    </ul>
                 </div>
             </div>
         </section>
@@ -191,6 +232,41 @@ def report_usage(tokens):
         json={"name": "token_usage", "value": tokens, "unit": "count"}
     )</code></pre>
                 </div>
+            </div>
+        </section>
+
+        <section id="dashboard">
+            <h2>Dashboard Guide</h2>
+            <div class="card">
+                <h3>Centralized Monitoring</h3>
+                <p>The AI Hub Dashboard provides a "single pane of glass" view for all AI operations within 99x.</p>
+                <div class="grid">
+                    <div class="card">
+                        <h4>Global Insights</h4>
+                        <p>Track total active agents, success rates across the org, and total token spend in real-time.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Team Views</h4>
+                        <p>Switch between departments to see how different squads are utilizing AI models.</p>
+                    </div>
+                    <div class="card">
+                        <h4>Agent Drill-down</h4>
+                        <p>Analyze specific agent performance, latency spikes, and historical metric trends.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="best-practices">
+            <h2>Best Practices</h2>
+            <div class="card">
+                <h3>Optimizing Your AI Implementation</h3>
+                <ul>
+                    <li><strong>Metric Frequency:</strong> Avoid flooding the API. Batch your metrics using the <code>/bulk</code> endpoint at the end of a request cycle or every 5 minutes.</li>
+                    <li><strong>Error Identification:</strong> Don't just report "Error". Use dimensions to specify if it was a <code>RateLimit</code>, <code>ContextWindowOverflow</code>, or <code>SafetyGuardrail</code> hit.</li>
+                    <li><strong>Security:</strong> Rotate your <code>X-Api-Key</code> every 90 days. Never hardcode keys; use environment variables or Azure Key Vault.</li>
+                    <li><strong>Versioning:</strong> When deploying a major model change (e.g., GPT-3.5 to GPT-4), register a new agent or use dimensions to track the version drift.</li>
+                </ul>
             </div>
         </section>
 
