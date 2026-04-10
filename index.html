@@ -16,6 +16,7 @@
             <li><a href="#features">Features & Scope</a></li>
             <li><a href="#metrics">Metrics & KPIs</a></li>
             <li><a href="#getting-started">Quick Start</a></li>
+            <li><a href="#integration">Integration</a></li>
             <li><a href="#faq">FAQ</a></li>
         </ul>
     </nav>
@@ -143,6 +144,52 @@ curl -X POST http://api.aihub/agents/{id}/apikeys \
 curl -X POST http://api.aihub/agents/{id}/metrics/bulk \
   -H "X-Api-Key: {key}" \
   -d '[{"name": "latency", "value": 0.5}]'</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section id="integration">
+            <h2>Platform Integration</h2>
+            <div class="card">
+                <h3>Universal Integration Model</h3>
+                <p>AI Hub is designed to be platform-agnostic. You can integrate it with any system that can make HTTP requests (Python, Node.js, C#, or No-Code tools like Zapier/Make).</p>
+                <div class="grid">
+                    <div class="card">
+                        <h4>1. Internal Agents</h4>
+                        <p>Simply include the <code>X-Api-Key</code> in your agent's middleware to push logs, metrics, and costs after every execution.</p>
+                    </div>
+                    <div class="card">
+                        <h4>2. CI/CD Pipelines</h4>
+                        <p>Integrate into GitHub Actions or Azure DevOps to update agent status or register new versions automatically upon deployment.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>SDK & Language Examples</h3>
+                <div class="code-block">
+                    <pre><code>// Example: Node.js / TypeScript Integration
+const pushMetric = async (name, value) => {
+    await fetch(`https://api.aihub.99x.io/agents/${AGENT_ID}/metrics`, {
+        method: 'POST',
+        headers: {
+            'X-Api-Key': process.env.AIHUB_API_KEY,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, value, unit: 'seconds' })
+    });
+};</code></pre>
+                </div>
+                <div class="code-block">
+                    <pre><code># Example: Python Integration
+import requests
+
+def report_usage(tokens):
+    requests.post(
+        f"https://api.aihub.99x.io/agents/{AGENT_ID}/metrics",
+        headers={"X-Api-Key": AIHUB_API_KEY},
+        json={"name": "token_usage", "value": tokens, "unit": "count"}
+    )</code></pre>
                 </div>
             </div>
         </section>
