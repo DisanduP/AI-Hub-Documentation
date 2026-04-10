@@ -12,13 +12,10 @@
         <ul>
             <li><a href="#overview">Overview</a></li>
             <li><a href="#architecture">Architecture</a></li>
-            <li><a href="#data-model">Data Model</a></li>
             <li><a href="#tech-stack">Tech Stack</a></li>
             <li><a href="#features">Features & Scope</a></li>
             <li><a href="#metrics">Metrics & KPIs</a></li>
-            <li><a href="#api">API & Keys</a></li>
-            <li><a href="#getting-started">Getting Started</a></li>
-            <li><a href="#api-reference">API Reference</a></li>
+            <li><a href="#getting-started">Quick Start</a></li>
             <li><a href="#faq">FAQ</a></li>
         </ul>
     </nav>
@@ -29,105 +26,77 @@
         </section>
 
         <section id="architecture">
-            <h2>Architecture</h2>
+            <h2>Architecture & Model</h2>
             <div class="card">
+                <h3>System Design</h3>
                 <p>Designed as a high-performance system with clear layer separation:</p>
                 <ul>
                     <li><strong>Frontend:</strong> React/Next.js dashboard for management and visualization.</li>
-                    <li><strong>Backend:</strong> ASP.NET Core API Gateway handling business logic and external integrations.</li>
-                    <li><strong>Integration:</strong> Seamless connection with Azure OpenAI, Microsoft Graph, and Entra ID (Azure AD).</li>
-                    <li><strong>Persistence:</strong> PostgreSQL for relational data and potentially vector stores for agent memory.</li>
+                    <li><strong>Backend:</strong> ASP.NET Core 8.0 API Gateway handling business logic and external integrations.</li>
+                    <li><strong>Persistence:</strong> PostgreSQL for relational data and identity management via Entra ID.</li>
                 </ul>
             </div>
-        </section>
-
-        <section id="data-model">
-            <h2>Core Data Model</h2>
+            
             <div class="card">
-                <h3>Entities & Relationships</h3>
+                <h3>Core Data Model</h3>
                 <ul>
-                    <li><strong>Users:</strong> Managed via Office 365/Entra ID. Supports multi-tenancy.</li>
+                    <li><strong>Users:</strong> Managed via Office 365/Entra ID with multi-tenant support.</li>
                     <li><strong>Agents:</strong> Each agent instance belongs to exactly one team.</li>
                     <li><strong>Teams:</strong> Supports hierarchical structures (Parent/Child teams).</li>
-                    <li><strong>Roles:</strong> Access is managed at the agent/team level (Admin vs. User).</li>
+                    <li><strong>Roles:</strong> Access managed at the agent/team level (Admin vs. User).</li>
                 </ul>
             </div>
-            <table>
-                <tr>
-                    <th>Entity</th>
-                    <th>Key Attributes</th>
-                </tr>
-                <tr>
-                    <td>AiAgent</td>
-                    <td>Category, Status, AI Model, TeamId</td>
-                </tr>
-                <tr>
-                    <td>AgentTeam</td>
-                    <td>Name, Description, ParentTeamId</td>
-                </tr>
-                <tr>
-                    <td>AgentMetric</td>
-                    <td>Name, Value, Unit, Dimensions (JSON)</td>
-                </tr>
-            </table>
         </section>
 
         <section id="tech-stack">
             <h2>Tech Stack & Infrastructure</h2>
             <div class="card">
-                <p><strong>Cloud Native:</strong> Hosted entirely on Azure using Infrastructure as Code principles.</p>
-                <ul>
-                    <li><strong>API:</strong> ASP.NET Core 8.0 Web API with Entity Framework Core.</li>
-                    <li><strong>Database:</strong> Azure Database for PostgreSQL.</li>
-                    <li><strong>Auth:</strong> Microsoft Identity Web (Entra ID) with JWT and custom tenant validation.</li>
-                    <li><strong>Observability:</strong> Application Insights telemetry integrated into both FE and BE.</li>
-                </ul>
+                <p><strong>Cloud Native:</strong> Hosted entirely on Azure using Infrastructure as Code (Bicep/Azure DevOps).</p>
+                <table>
+                    <tr>
+                        <th>Component</th>
+                        <th>Technology</th>
+                        <th>Azure Service</th>
+                    </tr>
+                    <tr>
+                        <td>Frontend</td>
+                        <td>Next.js / Tailwind</td>
+                        <td>Static Web Apps</td>
+                    </tr>
+                    <tr>
+                        <td>Backend</td>
+                        <td>.NET Core 8.0</td>
+                        <td>App Service (B1)</td>
+                    </tr>
+                    <tr>
+                        <td>Database</td>
+                        <td>PostgreSQL</td>
+                        <td>Azure DB for PostgreSQL</td>
+                    </tr>
+                    <tr>
+                        <td>Auth/Secrets</td>
+                        <td>Entra ID / OIDC</td>
+                        <td>Key Vault</td>
+                    </tr>
+                </table>
             </div>
-            <table>
-                <tr>
-                    <th>Component</th>
-                    <th>Technology</th>
-                </tr>
-                <tr>
-                    <td>Frontend App</td>
-                    <td>Next.js (Azure Static Web Apps)</td>
-                </tr>
-                <tr>
-                    <td>Backend API</td>
-                    <td>.NET Core (Azure App Service)</td>
-                </tr>
-                <tr>
-                    <td>Database</td>
-                    <td>PostgreSQL (Azure Database for PostgreSQL)</td>
-                </tr>
-                <tr>
-                    <td>Identity Provider</td>
-                    <td>Azure Entra ID (OIDC)</td>
-                </tr>
-                <tr>
-                    <td>Secrets Management</td>
-                    <td>Azure Key Vault</td>
-                </tr>
-                <tr>
-                    <td>Monitoring</td>
-                    <td>Azure App Insights</td>
-                </tr>
-            </table>
         </section>
 
         <section id="features">
             <h2>Scope & Features</h2>
-            <div class="card">
-                <h3>Agent Management</h3>
-                <p>Full CRUD for agents you belong to, including category tagging (Status, Model, Category) and contact person assignment.</p>
-            </div>
-            <div class="card">
-                <h3>Team Governance</h3>
-                <p>Manage members, roles (Admin/User), and team hierarchies. Invite members and handle access requests.</p>
-            </div>
-            <div class="card">
-                <h3>Identity</h3>
-                <p>RBAC aligned to org hierarchy with external identity support (AWS IAM, Azure AD).</p>
+            <div class="grid">
+                <div class="card">
+                    <h4>Agent Management</h4>
+                    <p>Full CRUD for agents, category tagging (Status, Model, Category), and contact person assignment.</p>
+                </div>
+                <div class="card">
+                    <h4>Team Governance</h4>
+                    <p>Manage members, roles, and hierarchies. Invite members and process access requests.</p>
+                </div>
+                <div class="card">
+                    <h4>Identity & Security</h4>
+                    <p>RBAC aligned to org hierarchy and strict tenant isolation via <code>Auth:AllowedTenantIds</code>.</p>
+                </div>
             </div>
         </section>
 
@@ -140,142 +109,53 @@
                 </div>
                 <div class="card">
                     <h4>Accuracy</h4>
-                    <p>Success rates, Hallucination tracking, Error types.</p>
+                    <p>Success rates, Hallucinations, Error types.</p>
                 </div>
                 <div class="card">
                     <h4>Resources</h4>
-                    <p>Token consumption, Cost-per-task, Model breakdown.</p>
+                    <p>Token usage, Cost-per-task, Model breakdown.</p>
                 </div>
             </div>
-        </section>
-
-        <section id="api">
-            <h2>API & Security</h2>
-            <p>Secure communication is established via Agent-specific API keys.</p>
-            <ul>
-                <li><strong>Key Management:</strong> Handled at the Agent/Team level.</li>
-                <li><strong>Auth:</strong> OIDC and API Keys for metrics ingestion.</li>
-                <li><strong>Endpoints:</strong> CRUD for entities, Async push for logs/metrics, and Real-time triggers.</li>
-            </ul>
+            <div class="card">
+                <h3>Standard Classifications</h3>
+                <p><strong>Models:</strong> GPT4, Claude3, Gemini, Llama3, Mistral</p>
+                <p><strong>Categories:</strong> CustomerService, DataAnalysis, CodeAssistant, Research</p>
+            </div>
         </section>
 
         <section id="getting-started">
-            <h2>Getting Started: Quick Start Guide</h2>
+            <h2>Quick Start Guide</h2>
             <div class="card">
-                <h3>1. Register Your AI Agent</h3>
-                <p>Register your agent to get a unique identifier and enable monitoring.</p>
+                <h3>1. Register & Key Generation</h3>
+                <p>Register your agent via the API or Dashboard to receive your unique <code>agentId</code> and generate an <code>X-Api-Key</code>.</p>
                 <div class="code-block">
-                    <pre><code>curl -X POST http://localhost:5000/agents \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
-  -d '{
-    "name": "Customer Support Chatbot",
-    "description": "AI-powered customer support assistant",
-    "category": "CustomerService",
-    "model": "GPT4",
-    "keyFeatures": "NLP;Intent classification"
-  }'</code></pre>
+                    <pre><code># Create API Key
+curl -X POST http://api.aihub/agents/{id}/apikeys \
+  -H "Authorization: Bearer {token}"</code></pre>
                 </div>
             </div>
 
             <div class="card">
-                <h3>2. Create API Key for Metrics</h3>
-                <p>Generate a key for your agent to send metrics without full user authentication.</p>
+                <h3>2. Push Metrics</h3>
+                <p>Use your API key to push performance data (single or bulk).</p>
                 <div class="code-block">
-                    <pre><code>curl -X POST http://localhost:5000/agents/{agentId}/apikeys \
-  -H "Authorization: Bearer YOUR_ACCESS_TOKEN" \
-  -d '{"name": "Metrics Key"}'</code></pre>
+                    <pre><code># Bulk Upload
+curl -X POST http://api.aihub/agents/{id}/metrics/bulk \
+  -H "X-Api-Key: {key}" \
+  -d '[{"name": "latency", "value": 0.5}]'</code></pre>
                 </div>
-            </div>
-
-            <div class="card">
-                <h3>3. Send Metrics</h3>
-                <p>Use your API key to push performance data.</p>
-                <div class="code-block">
-                    <pre><code>curl -X POST http://localhost:5000/agents/{agentId}/metrics \
-  -H "X-Api-Key: sk-your-key" \
-  -d '[{
-    "name": "response_time",
-    "value": 1.2,
-    "unit": "seconds"
-  }]'</code></pre>
-                </div>
-            </div>
-        </section>
-
-        <section id="api-reference">
-            <h2>API Endpoints Reference</h2>
-            <div class="grid">
-                <div class="card">
-                    <h4>Agents</h4>
-                    <ul>
-                        <li><code>POST /agents</code> - Create agent</li>
-                        <li><code>GET /agents</code> - List with filters (category, status, model, team)</li>
-                        <li><code>GET /agents/my-agents</code> - List agents user belongs to</li>
-                        <li><code>PATCH /agents/{id}/activate</code> - Set status to Active</li>
-                        <li><code>PATCH /agents/{id}/inactivate</code> - Set status to Inactive</li>
-                        <li><code>PUT /agents/{id}/team</code> - Assign to specific team</li>
-                    </ul>
-                </div>
-                <div class="card">
-                    <h4>Metrics (Public/API Key)</h4>
-                    <p class="tag tag-tech" style="font-size: 0.7rem; margin-bottom: 0.5rem;">X-Api-Key Required</p>
-                    <ul>
-                        <li><code>POST /agents/{id}/metrics</code> - Push single metric</li>
-                        <li><code>POST /agents/{id}/metrics/bulk</code> - Push metric array</li>
-                        <li><code>GET /agents/{id}/metrics?days={n}</code> - Get history</li>
-                    </ul>
-                </div>
-                <div class="card">
-                    <h4>Teams & Keys</h4>
-                    <ul>
-                        <li><code>POST /teams</code> - Create new team</li>
-                        <li><code>POST /teams/{id}/members</code> - Manage team access</li>
-                        <li><code>POST /agents/{id}/apikeys</code> - Create ingestion key</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <section id="enums">
-            <h2>Standard Classifications</h2>
-            <div class="grid">
-                <div class="card">
-                    <h4>AI Models</h4>
-                    <p>GPT4, GPT35, Claude3, Claude2, Gemini, Llama3, Mistral, Other</p>
-                </div>
-                <div class="card">
-                    <h4>Categories</h4>
-                    <p>CustomerService, DataAnalysis, ContentGeneration, CodeAssistant, Research, Other</p>
-                </div>
-                <div class="card">
-                    <h4>Status</h4>
-                    <p>Active, Inactive, Draft, Decommissioned</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="security">
-            <h2>Security & Compliance</h2>
-            <div class="card">
-                <h3>Multi-Tenancy</h3>
-                <p>The system enforces strict tenant isolation. Only users from authorized Entra ID tenants (configured via <code>Auth:AllowedTenantIds</code>) can access the platform.</p>
-            </div>
-            <div class="card">
-                <h3>Rate Limiting & Keys</h3>
-                <p>Metrics ingestion is decoupled from user session tokens. Each <code>X-Api-Key</code> is bound to a specific <code>agentId</code> for maximum security and minimal attack surface.</p>
             </div>
         </section>
 
         <section id="faq">
-            <h2>Frequently Asked Questions</h2>
-            <div class="card">
-                <strong>Do I have to use AI Hub for all projects?</strong>
-                <p>No, it's voluntary but highly recommended for centralized visibility.</p>
-            </div>
+            <h2>FAQ</h2>
             <div class="card">
                 <strong>How does authentication work?</strong>
-                <p>Users use Microsoft Entra ID (OIDC). Metrics collection uses X-Api-Key headers.</p>
+                <p>Users use Entra ID. Metrics ingestion uses <code>X-Api-Key</code> headers bound to specific agents for security.</p>
+            </div>
+            <div class="card">
+                <strong>Is participation mandatory?</strong>
+                <p>No, but highly recommended for centralized visibility and cost management.</p>
             </div>
         </section>
     </main>
