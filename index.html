@@ -8,7 +8,7 @@
 </head>
 <body>
     <nav>
-        <h1>AI HUB</h1>
+        <h1>99x AI HUB</h1>
         <ul>
             <li><a href="#overview">Overview</a></li>
             <li><a href="#architecture">Architecture</a></li>
@@ -74,6 +74,15 @@
 
         <section id="tech-stack">
             <h2>Tech Stack & Infrastructure</h2>
+            <div class="card">
+                <p><strong>Cloud Native:</strong> Hosted entirely on Azure using Infrastructure as Code principles.</p>
+                <ul>
+                    <li><strong>API:</strong> ASP.NET Core 8.0 Web API with Entity Framework Core.</li>
+                    <li><strong>Database:</strong> Azure Database for PostgreSQL.</li>
+                    <li><strong>Auth:</strong> Microsoft Identity Web (Entra ID) with JWT and custom tenant validation.</li>
+                    <li><strong>Observability:</strong> Application Insights telemetry integrated into both FE and BE.</li>
+                </ul>
+            </div>
             <table>
                 <tr>
                     <th>Component</th>
@@ -200,25 +209,61 @@
                 <div class="card">
                     <h4>Agents</h4>
                     <ul>
-                        <li><code>POST /agents</code> - Create</li>
-                        <li><code>GET /agents</code> - List all</li>
-                        <li><code>PATCH /agents/{id}/activate</code> - Activate</li>
+                        <li><code>POST /agents</code> - Create agent</li>
+                        <li><code>GET /agents</code> - List with filters (category, status, model, team)</li>
+                        <li><code>GET /agents/my-agents</code> - List agents user belongs to</li>
+                        <li><code>PATCH /agents/{id}/activate</code> - Set status to Active</li>
+                        <li><code>PATCH /agents/{id}/inactivate</code> - Set status to Inactive</li>
+                        <li><code>PUT /agents/{id}/team</code> - Assign to specific team</li>
                     </ul>
                 </div>
                 <div class="card">
-                    <h4>Metrics</h4>
+                    <h4>Metrics (Public/API Key)</h4>
+                    <p class="tag tag-tech" style="font-size: 0.7rem; margin-bottom: 0.5rem;">X-Api-Key Required</p>
                     <ul>
-                        <li><code>POST /agents/{id}/metrics</code> - Push</li>
-                        <li><code>GET /agents/{id}/metrics</code> - Retrieval</li>
+                        <li><code>POST /agents/{id}/metrics</code> - Push single metric</li>
+                        <li><code>POST /agents/{id}/metrics/bulk</code> - Push metric array</li>
+                        <li><code>GET /agents/{id}/metrics?days={n}</code> - Get history</li>
                     </ul>
                 </div>
                 <div class="card">
-                    <h4>Teams</h4>
+                    <h4>Teams & Keys</h4>
                     <ul>
-                        <li><code>POST /teams</code> - Create team</li>
-                        <li><code>POST /teams/{id}/members</code> - Add members</li>
+                        <li><code>POST /teams</code> - Create new team</li>
+                        <li><code>POST /teams/{id}/members</code> - Manage team access</li>
+                        <li><code>POST /agents/{id}/apikeys</code> - Create ingestion key</li>
                     </ul>
                 </div>
+            </div>
+        </section>
+
+        <section id="enums">
+            <h2>Standard Classifications</h2>
+            <div class="grid">
+                <div class="card">
+                    <h4>AI Models</h4>
+                    <p>GPT4, GPT35, Claude3, Claude2, Gemini, Llama3, Mistral, Other</p>
+                </div>
+                <div class="card">
+                    <h4>Categories</h4>
+                    <p>CustomerService, DataAnalysis, ContentGeneration, CodeAssistant, Research, Other</p>
+                </div>
+                <div class="card">
+                    <h4>Status</h4>
+                    <p>Active, Inactive, Draft, Decommissioned</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="security">
+            <h2>Security & Compliance</h2>
+            <div class="card">
+                <h3>Multi-Tenancy</h3>
+                <p>The system enforces strict tenant isolation. Only users from authorized Entra ID tenants (configured via <code>Auth:AllowedTenantIds</code>) can access the platform.</p>
+            </div>
+            <div class="card">
+                <h3>Rate Limiting & Keys</h3>
+                <p>Metrics ingestion is decoupled from user session tokens. Each <code>X-Api-Key</code> is bound to a specific <code>agentId</code> for maximum security and minimal attack surface.</p>
             </div>
         </section>
 
